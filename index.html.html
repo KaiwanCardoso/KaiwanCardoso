@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Uma Surpresa Para Você</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ffdde1, #ee9ca7);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        /* --- ESTADO INICIAL DOS ELEMENTOS --- */
+        #clique-aqui {
+            display: block; /* O único visível no início */
+        }
+        .envelope-wrapper, .carta, .coracao {
+            display: none; /* Todos os outros começam completamente escondidos */
+        }
+        
+        /* --- ESTILOS VISUAIS DOS ELEMENTOS --- */
+        #clique-aqui, .envelope-wrapper, .carta, .coracao {
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        #clique-aqui {
+            font-size: 1.5em;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            padding: 20px;
+            border: 2px dashed white;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .container {
+            position: relative;
+            perspective: 1000px;
+        }
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background-color: #f08080;
+        }
+        .envelope::before, .envelope::after {
+            content: '';
+            position: absolute;
+            width: 0; height: 0;
+            border-style: solid;
+        }
+        .envelope::before {
+            border-width: 100px 150px;
+            border-color: transparent transparent #e57373 transparent;
+            top: 0; left: 0;
+        }
+        .envelope::after {
+            border-width: 100px 150px;
+            border-color: #cd5c5c transparent transparent transparent;
+            bottom: 0; left: 0;
+            z-index: 3;
+        }
+        .aba {
+            position: absolute;
+            width: 0; height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid #f08080;
+            top: 0; left: 0;
+            transform-origin: top;
+            transition: transform 1s ease-in-out;
+            z-index: 4;
+        }
+        .aberto .aba {
+            transform: rotateX(180deg);
+        }
+
+        .carta {
+            background-color: #fffaf0;
+            width: 450px;
+            padding: 25px;
+            box-sizing: border-box;
+            display: none; /* JS muda para 'flex' */
+            justify-content: center;
+            align-items: center;
+            font-size: 1.1em;
+            color: #444;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        
+        .coracao {
+            font-size: 15em;
+            color: #e53935;
+            animation: pulsar 1.5s infinite;
+        }
+        @keyframes pulsar {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="clique-aqui">Uma surpresa para você...<br>Clique aqui, meu amor!</div>
+    <div class="envelope-wrapper">
+        <div class="container">
+            <div class="envelope"></div>
+            <div class="aba"></div>
+        </div>
+    </div>
+    <div class="carta">Oi meu amor, tudo bem ? Sei que deve ter acabado de acordar, e eu espero que você tenha dormido extremamente bem! Hoje como você já deve imaginar é um dia completamente especial, hoje é o dia que celebramos nosso relacionamento e que por mais que alguns consideram "apenas mais um dia", eu considero muito mais, é um dia completamente especial para mim, e me marca sempre. Nós estamos nessa jornada juntos a quase 3 anos e sem duvidas é uma experiencia que quero continuar vivendo com você, você é uma mulher INCRIVEL!!! Sem duvidas a mulher mais perfeita que eu já conheci na vida, E eu não sei te explicar o quão feliz eu sou com você. Hoje quero que a gente aproveite nosso dia! Quero que a gente se ame, quero que possamos passar juntos a maior quantidade de tempo possivel. Eu não pude fazer muito, mas quero que saiba isso é apenas a primeira coisa... EU TE AMO ISABEL. EU TE AMO MUITO.</div>
+    <div class="coracao">❤️</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Seleciona os elementos
+            const cliqueAqui = document.getElementById('clique-aqui');
+            const envelopeWrapper = document.querySelector('.envelope-wrapper');
+            const container = document.querySelector('.container');
+            const carta = document.querySelector('.carta');
+            const coracao = document.querySelector('.coracao');
+
+            // Função para fazer a transição suave (fade)
+            function fadeTransation(elementOut, elementIn) {
+                elementOut.style.opacity = '0';
+                setTimeout(() => {
+                    elementOut.style.display = 'none';
+                    elementIn.style.display = 'block';
+                    if (elementIn.classList.contains('carta')) {
+                        elementIn.style.display = 'flex';
+                    }
+                    setTimeout(() => {
+                        elementIn.style.opacity = '1';
+                    }, 50);
+                }, 800); // Duração da transição do CSS
+            }
+
+            cliqueAqui.addEventListener('click', () => {
+                // 1. Botão -> Envelope
+                fadeTransation(cliqueAqui, envelopeWrapper);
+                
+                // 2. Abre a aba do envelope
+                setTimeout(() => {
+                    container.classList.add('aberto');
+                }, 1300); // Um pouco depois do envelope aparecer
+
+                // 3. Envelope -> Carta
+                setTimeout(() => {
+                    fadeTransation(envelopeWrapper, carta);
+                }, 3000);
+
+                // 4. Carta -> Coração
+                setTimeout(() => {
+                    fadeTransation(carta, coracao);
+                }, 30000); // Tempo para ler a carta
+            });
+        });
+    </script>
+</body>
+</html>
